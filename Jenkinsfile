@@ -30,10 +30,10 @@ pipeline {
                     )
                 ]) {
                     sh '''
-                        cat > terraform.tfvars <<EOF
+                        cat > terraform.tfvars <<EOF2
 key_name = "linux"
 db_password = "$DB_PASSWORD"
-EOF
+EOF2
                         terraform plan
                         rm -f terraform.tfvars
                     '''
