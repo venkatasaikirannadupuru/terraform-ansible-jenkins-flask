@@ -24,7 +24,7 @@ HTML = """
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Employee Management</title>
+    <title><title>Employee Management System - AWS</title></title>
 </head>
 <body>
     <h1>Employee Management System</h1>
