@@ -1,0 +1,21 @@
+---
+- name: Deploy Flask Application
+  hosts: app
+  become: yes
+
+  tasks:
+    - name: Create application directory
+      file:
+        path: /opt/flask-app
+        state: directory
+        owner: ubuntu
+        group: ubuntu
+        mode: "0755"
+
+    - name: Copy Flask application
+      copy:
+        src: ./
+        dest: /opt/flask-app/
+        owner: ubuntu
+        group: ubuntu
+        mode: "0644"

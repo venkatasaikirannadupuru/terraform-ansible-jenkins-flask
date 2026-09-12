@@ -1,0 +1,53 @@
+---
+- name: Configure Flask Application Server
+  hosts: app
+  become: yes
+
+  tasks:
+    - name: Update apt package cache
+      apt:
+        update_cache: yes
+
+    - name: Install required packages
+      apt:
+        name:
+          - python3-pip
+          - python3-venv
+          - git
+          - nginx
+        state: present
+
+    - name: Create Flask systemd service
+      copy:
+        dest: /etc/systemd/system/flask-app.service
+        content: |
+          [Unit]
+          Description=Flask Employee Management Application
+          After=network.target
+
+          [Service]
+          User=ubuntu
+          WorkingDirectory=/opt/flask-app
+          Environment="DB_HOST=flask-employee-db.cbo4yeqa4rcg.ap-south-1.rds.amazonaws.com"
+          Environment="DB_USER=admin"
+          Environment="DB_NAME=employee_db"
+          Environment="DB_PASSWORD={{ db_password }}"
+          ExecStart=/usr/bin/python3 /opt/flask-app/app.py
+          Restart=always
+
+          [Install]
+          WantedBy=multi-user.target
+
+    - name: Reload systemd
+      systemd:
+        daemon_reload: yes
+
+    - name: Enable Flask service
+      systemd:
+        name: flask-app
+        enabled: yes
+
+    - name: Start Flask service
+      systemd:
+        name: flask-app
+        state: started
